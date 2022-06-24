@@ -1,0 +1,13 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Database {
+  string source = 1;
+  uint32 max_idle_conn = 2;
+  uint32 max_open_conn = 3;
+  google.protobuf.Duration conn_max_lifetime = 4;
+}

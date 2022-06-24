@@ -1,0 +1,11 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+message Consul {
+  string address = 1;     // Consul 服务器地址
+  string scheme = 2;      // Consul 服务器的 URI 方案 ("http" or "grpc")
+  string datacenter = 3;  // 数据中心
+  string path = 4;        // 配置文件路径
+}

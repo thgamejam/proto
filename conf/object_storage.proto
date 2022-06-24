@@ -1,0 +1,13 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+message ObjectStorage {
+  string domain = 1;          // 域名
+  string access_key_id = 2;
+  string secret_access_key = 3;
+  string location = 4;        // 地域
+  bool   secure = 5;          // 是否使用https
+  string token = 6;
+}

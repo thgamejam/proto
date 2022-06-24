@@ -1,0 +1,11 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+message Email{
+  string host = 1;
+  uint32 port = 2;
+  string username = 3;
+  string password = 4;
+}

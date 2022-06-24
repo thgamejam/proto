@@ -1,0 +1,14 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message HTTP {
+  string network = 1;
+  string addr = 2;
+  google.protobuf.Duration timeout = 3;
+  uint32 required_body_size = 4;
+  uint32 max_body_size = 5;
+}

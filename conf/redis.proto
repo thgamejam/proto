@@ -1,0 +1,15 @@
+syntax = "proto3";
+package thjam.pkg.conf;
+
+option go_package = "github.com/thgamejam/pkg/conf;conf";
+
+import "google/protobuf/duration.proto";
+
+message Redis {
+  string network = 1;
+  string addr = 2;
+  string password = 3;
+  google.protobuf.Duration read_timeout = 4;
+  google.protobuf.Duration write_timeout = 5;
+  google.protobuf.Duration delay_delete_time = 6;
+}
