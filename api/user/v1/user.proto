@@ -16,8 +16,6 @@ service User {
   // 使用ID获取用户
   rpc GetUserByAccountID (GetUserByAccountIDRequest) returns (GetUserByAccountIDReply) {}
 
-  // 使用邮箱获取用户
-  rpc GetUsernameByEmail (GetUserByEmailRequest) returns (GetUserReply) {}
 
 }
 
@@ -39,14 +37,6 @@ message GetUserByAccountIDReply{
   UserInfo userInfo= 1;
 }
 
-// GetUserByEmailRequest 通过邮箱获取用户请求
-message GetUserByEmailRequest{
-  string email = 1 [(validate.rules).string = {email: true, max_len: 32}];
-}
-// 返回用户信息
-message GetUserReply{
-  UserInfo userInfo= 1;
-}
 
 // UserInfo 用户信息
 message UserInfo{
