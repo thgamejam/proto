@@ -14,4 +14,13 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-.idea
+# Develop tools
+.vscode/
+.idea/
+*.swp
+
+# proto 生成文件
+*.pb.go
+*.pb.validate.go
+*.swagger.json
+openapi.yaml
