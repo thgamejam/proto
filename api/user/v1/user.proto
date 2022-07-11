@@ -1,48 +1,109 @@
 syntax = "proto3";
 
-package user.v1;
+package thjam.api.user.v1;
 
 import "validate/validate.proto";
 
-option go_package = "service/api/user/v1;v1";
-option java_multiple_files = true;
-option java_package = "dev.kratos.api.user.v1";
-option java_outer_classname = "UserProtoV1";
+option go_package = "proto/api/user/v1;v1";
 
 service User {
   // 创建用户
-  rpc CreateUser (CreateUserRequest) returns (CreateUserReply) {}
+  rpc CreateUser (CreateUserRequest) returns (UserInfo) {}
 
   // 使用ID获取用户
-  rpc GetUserByAccountID (GetUserByAccountIDRequest) returns (GetUserByAccountIDReply) {}
+  rpc GetUserInfoByAccountID (GetUserInfoByAccountIDRequest) returns (UserInfo) {}
 
+  // 获取用户信息
+  rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {}
 
-}
+  // 获取用户简要信息
+  rpc GetUserSimpleInfo (GetUserInfoRequest) returns (UserSimpleInfo) {}
 
-// CreateUserRequest 创建用户请求
-message CreateUserRequest {
-  uint32 accountID = 1;
-}
-// CreateUserReply 创建用户请求返回信息
-message CreateUserReply {
-  UserInfo userInfo = 1;
-}
+  // 获得多个用户的简要信息
+  rpc GetMultipleUsersSimpleInfo (GetMultipleUsersSimpleInfoRequest) returns (GetMultipleUsersSimpleInfoReply) {}
 
-// GetUserRequest 获取用户请求
-message GetUserByAccountIDRequest{
-  uint32 accountID = 1;
-}
-// GetUserByAccountIDReply 返回用户信息
-message GetUserByAccountIDReply{
-  UserInfo userInfo= 1;
+  // 修改用户
+  rpc SaveUser (SaveUserRequest) returns (EmptyReply) {}
+
+  // 获得用户拥有的所有标签
+  rpc GetTagList (GetTagListRequest) returns (GetTagListReply) {}
+
+  // 获取上传头像的链接
+  rpc GetUploadAvatarURL (GetUploadAvatarURLRequest) returns (GetUploadAvatarURLReply) {}
+
 }
 
 
 // UserInfo 用户信息
-message UserInfo{
-  string name = 1;
-  string avatar_url = 2;
-  uint32 work_count = 3;
-  uint32 fans_count = 4;
-  repeated string tags = 5;
+message UserInfo {
+  uint32 id = 1;            // user-id
+  string username = 2;      // 用户名
+  string bio = 3;           // 简介
+  string avatar_url = 4;    // 头像
+  repeated string tags = 5; // 标签
+}
+
+// UserSimpleInfo 用户简要信息
+message UserSimpleInfo {
+  uint32 id = 1;          // user-id
+  string username = 2;    // 用户名
+  string bio = 3;         // 简介
+  string avatar_url = 4;  // 头像
+}
+
+// EmptyReply 空回复
+message EmptyReply {
+}
+
+// CreateUserRequest 创建用户请求
+message CreateUserRequest {
+  uint32 account_id = 1;
+}
+
+// GetUserInfoByAccountIDRequest 获取用户请求
+message GetUserInfoByAccountIDRequest {
+  uint32 account_id = 1;
+}
+
+// GetUserInfoRequest 获取用户信息请求
+message GetUserInfoRequest {
+  uint32 id = 1;
+}
+
+// GetMultipleUsersSimpleInfoRequest 获取多个用户简要信息请求
+message GetMultipleUsersSimpleInfoRequest {
+  repeated uint32 ids = 1;
+}
+// GetMultipleUsersSimpleInfoReply 获取多个用户简要信息回复
+message GetMultipleUsersSimpleInfoReply {
+  repeated UserSimpleInfo info = 1;
+}
+
+// SaveUserRequest 修改用户请求
+message SaveUserRequest {
+  uint32 id = 1;                  // user-id
+  optional string username = 2;   // 用户名 可选
+  optional string bio = 3;        // 简介 可选
+  optional string avatar_url = 4; // 头像 可选
+  repeated uint32 tag_id = 5;     // 标签id
+}
+
+// GetTagListRequest 获得用户拥有的所有标签请求
+message GetTagListRequest {
+  uint32 id = 1;  // user-id
+}
+// GetTagListReply 获得用户拥有的所有标签回复
+message GetTagListReply {
+  map<uint32, string> tags = 1; // 标签<标签id, 标签内容>
+}
+
+// GetUploadAvatarURLRequest 获取上传头像使用URL请求
+message GetUploadAvatarURLRequest {
+  uint32 id = 1;    // user-id
+  string crc32 = 2; // 头像文件的crc32-hash值
+  string sha1 = 3;  // 头像文件的sha1-hash值
+}
+// GetUploadAvatarURLReply 获取上传头像使用URL回复
+message GetUploadAvatarURLReply {
+  string url = 1;
 }
