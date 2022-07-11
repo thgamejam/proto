@@ -29,6 +29,7 @@ service Passport {
   rpc VerifyEmail(VerifyEmailRequest) returns (LoginReply) {
     option(google.api.http) = {
       post: "/web/v1/users/email-auth"
+      body: "*"
     };
   }
 
@@ -36,6 +37,7 @@ service Passport {
   rpc Logout(LogoutRequest) returns (LogoutReply) {
     option(google.api.http) = {
       post: "/web/v1/users/logout"
+      body: "*"
     };
   }
 
