@@ -1,13 +1,10 @@
 syntax = "proto3";
 
-package upload_file.v1;
+package thjam.api.upload.v1;
 
 import "errors/errors.proto";
 
-option go_package = "service/api/upload-file/v1;v1";
-option java_multiple_files = true;
-option java_package = "cc.thjam.api.upload-file.v1.errors";
-option objc_class_prefix = "UploadFileAPIErrorsV1";
+option go_package = "proto/api/upload/v1;v1";
 
 enum ErrorReason {
   option (errors.default_code) = 500;
