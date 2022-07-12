@@ -77,11 +77,10 @@ message LoginRequest {
 message LoginReply {
   message User {
     uint32 id = 1;    // user-id
-    string email = 2;
-    string token = 3; // JWT
-    string username = 4;
-    string bio = 5;   // 简介
-    string image = 6; // 头像
+    string token = 2; // JWT
+    string username = 3;
+    string bio = 4;   // 简介
+    string image = 5; // 头像
   }
   User user = 1;
 }
