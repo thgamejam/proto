@@ -16,20 +16,25 @@ service User {
   // 获取用户信息
   rpc GetUserInfo (GetUserInfoRequest) returns (UserInfo) {}
 
-  // 获取用户简要信息
-  rpc GetUserSimpleInfo (GetUserInfoRequest) returns (UserSimpleInfo) {}
+  // 获得多个用户的信息
+  rpc GetMultipleUsersInfo (GetMultipleUsersInfoRequest) returns (GetMultipleUsersInfoReply) {}
 
-  // 获得多个用户的简要信息
-  rpc GetMultipleUsersSimpleInfo (GetMultipleUsersSimpleInfoRequest) returns (GetMultipleUsersSimpleInfoReply) {}
-
-  // 修改用户
-  rpc SaveUser (SaveUserRequest) returns (EmptyReply) {}
+  // UserEdit 修改用户
+  // 该请求需要保证请求的id已经存在，如果不存在，该接口会返回失败
+  // 编辑接口不关心用户信息完成度，需要传入全量的信息
+  rpc UserEdit (UserEditRequest) returns (EmptyReply) {}
 
   // 获得用户拥有的所有标签
   rpc GetTagList (GetTagListRequest) returns (GetTagListReply) {}
 
   // 获取上传头像的链接
   rpc GetUploadAvatarURL (GetUploadAvatarURLRequest) returns (GetUploadAvatarURLReply) {}
+
+  // 封禁用户
+  rpc BanUser(BanUserRequest) returns (EmptyReply) {}
+
+  // 解封用户
+  rpc DeBanUser(DeBanUserRequest) returns (EmptyReply) {}
 
 }
 
@@ -41,14 +46,6 @@ message UserInfo {
   string bio = 3;           // 简介
   string avatar_url = 4;    // 头像
   repeated string tags = 5; // 标签
-}
-
-// UserSimpleInfo 用户简要信息
-message UserSimpleInfo {
-  uint32 id = 1;          // user-id
-  string username = 2;    // 用户名
-  string bio = 3;         // 简介
-  string avatar_url = 4;  // 头像
 }
 
 // EmptyReply 空回复
@@ -70,17 +67,17 @@ message GetUserInfoRequest {
   uint32 id = 1;
 }
 
-// GetMultipleUsersSimpleInfoRequest 获取多个用户简要信息请求
-message GetMultipleUsersSimpleInfoRequest {
+// GetMultipleUsersInfoRequest 获取多个用户信息请求
+message GetMultipleUsersInfoRequest {
   repeated uint32 ids = 1;
 }
-// GetMultipleUsersSimpleInfoReply 获取多个用户简要信息回复
-message GetMultipleUsersSimpleInfoReply {
-  repeated UserSimpleInfo info = 1;
+// GetMultipleUsersInfoReply 获取多个用户信息回复
+message GetMultipleUsersInfoReply {
+  repeated UserInfo info = 1;
 }
 
-// SaveUserRequest 修改用户请求
-message SaveUserRequest {
+// UserEditRequest 修改用户请求
+message UserEditRequest {
   uint32 id = 1;                  // user-id
   optional string username = 2;   // 用户名 可选
   optional string bio = 3;        // 简介 可选
@@ -106,4 +103,11 @@ message GetUploadAvatarURLRequest {
 // GetUploadAvatarURLReply 获取上传头像使用URL回复
 message GetUploadAvatarURLReply {
   string url = 1;
+}
+
+message BanUserRequest {
+  uint32 id = 1;  // user-id
+}
+message DeBanUserRequest {
+  uint32 id = 1;  // user-id
 }
