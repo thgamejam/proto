@@ -25,6 +25,10 @@ service User {
   // 编辑接口不关心用户信息完成度，需要传入全量的信息
   rpc UserEdit (UserEditRequest) returns (google.protobuf.Empty) {}
 
+  // UserEditTags 修改用户标签
+  // 该请求需要保证至多3个标签，如果大于3个，该接口会返回失败
+  rpc UserEditTags(UserEditTagsRequest) returns (google.protobuf.Empty) {}
+
   // 获得用户拥有的所有标签
   rpc GetTagList (GetTagListRequest) returns (GetTagListReply) {}
 
@@ -79,7 +83,12 @@ message UserEditRequest {
   optional string username = 2;   // 用户名 可选
   optional string bio = 3;        // 简介 可选
   optional string avatar_url = 4; // 头像 可选
-  repeated uint32 tag_id = 5;     // 标签id
+}
+
+// UserEditTagsRequest 修改用户标签请求
+message UserEditTagsRequest {
+  uint32 id = 1;            // user-id
+  repeated uint32 tags = 2; // tag-id列表
 }
 
 // GetTagListRequest 获得用户拥有的所有标签请求
