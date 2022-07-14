@@ -2,8 +2,9 @@ syntax = "proto3";
 
 package thjam.api.passport.v1;
 
-import "google/api/annotations.proto";
 import "validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "proto/api/passport/v1;v1";
 
@@ -18,7 +19,7 @@ service Passport {
   }
 
   // 预创建账户
-  rpc CreateAccount (CreateAccountRequest) returns (CreateAccountReply) {
+  rpc CreateAccount (CreateAccountRequest) returns (google.protobuf.Empty) {
     option(google.api.http) = {
       post: "/web/v1/users"
       body: "*"
@@ -34,7 +35,7 @@ service Passport {
   }
 
   // 登出
-  rpc Logout(LogoutRequest) returns (LogoutReply) {
+  rpc Logout(google.protobuf.Empty) returns (google.protobuf.Empty) {
     option(google.api.http) = {
       post: "/web/v1/users/logout"
       body: "*"
@@ -42,7 +43,7 @@ service Passport {
   }
 
   // 获取密码加密公钥，随机的
-  rpc GetPublicKey(GetPublicKeyRequest) returns (GetPublicKeyReply) {
+  rpc GetPublicKey(google.protobuf.Empty) returns (GetPublicKeyReply) {
     option(google.api.http) = {
       get: "/web/v1/keys"
     };
@@ -94,9 +95,6 @@ message CreateAccountRequest {
   User user = 1;
   string token = 2;     // 验证码token
 }
-// 预创建账户返回
-message CreateAccountReply {
-}
 
 // 验证邮箱请求
 message VerifyEmailRequest {
@@ -104,14 +102,6 @@ message VerifyEmailRequest {
   string key = 2 [(validate.rules).string.len = 32];    // 校验哈希
 }
 
-// 注销
-message LogoutRequest{
-}
-message LogoutReply{
-}
-
-message GetPublicKeyRequest {
-}
 message GetPublicKeyReply {
   message PublicKey {
     string hash = 1;  // 秘钥哈希

@@ -3,6 +3,7 @@ syntax = "proto3";
 package thjam.api.user.v1;
 
 import "validate/validate.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "proto/api/user/v1;v1";
 
@@ -22,7 +23,7 @@ service User {
   // UserEdit 修改用户
   // 该请求需要保证请求的id已经存在，如果不存在，该接口会返回失败
   // 编辑接口不关心用户信息完成度，需要传入全量的信息
-  rpc UserEdit (UserEditRequest) returns (EmptyReply) {}
+  rpc UserEdit (UserEditRequest) returns (google.protobuf.Empty) {}
 
   // 获得用户拥有的所有标签
   rpc GetTagList (GetTagListRequest) returns (GetTagListReply) {}
@@ -31,10 +32,10 @@ service User {
   rpc GetUploadAvatarURL (GetUploadAvatarURLRequest) returns (GetUploadAvatarURLReply) {}
 
   // 封禁用户
-  rpc BanUser(BanUserRequest) returns (EmptyReply) {}
+  rpc BanUser(BanUserRequest) returns (google.protobuf.Empty) {}
 
   // 解封用户
-  rpc DeBanUser(DeBanUserRequest) returns (EmptyReply) {}
+  rpc DeBanUser(DeBanUserRequest) returns (google.protobuf.Empty) {}
 
 }
 
@@ -46,10 +47,6 @@ message UserInfo {
   string bio = 3;           // 简介
   string avatar_url = 4;    // 头像
   repeated string tags = 5; // 标签
-}
-
-// EmptyReply 空回复
-message EmptyReply {
 }
 
 // CreateUserRequest 创建用户请求

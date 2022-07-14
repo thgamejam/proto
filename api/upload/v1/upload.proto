@@ -4,6 +4,7 @@ package thjam.api.upload.v1;
 
 import "validate/validate.proto";
 import "google/api/annotations.proto";
+import "google/protobuf/empty.proto";
 
 option go_package = "proto/api/upload/v1;v1";
 
@@ -38,7 +39,7 @@ message UploadFileReq {
   string crc = 6  [(validate.rules).string.len = 8];  // 上传文件的crc-32-hash值
   string sha1 = 7 [(validate.rules).string.len = 40]; // 上传文件的sha1-hash值
 
-  EmptyBody body = 8;
+  google.protobuf.Empty body = 8;
 }
 
 // 大文件分片上传请求
@@ -55,13 +56,9 @@ message UploadSliceFileReq {
   string crc = 8      [(validate.rules).string.len = 8];  // 上传文件的crc-32-hash值
   string sha1 = 9     [(validate.rules).string.len = 40]; // 上传文件的sha1-hash值
 
-  EmptyBody body = 10;
+  google.protobuf.Empty body = 10;
 }
 
 // 文件上传回复
 message UploadFileReply {
-}
-
-// 空的body
-message EmptyBody {
 }
