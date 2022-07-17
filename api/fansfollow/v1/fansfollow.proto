@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package fansfollow.v1;
+
+option go_package = "service/api/account/v1;v1";
+import "google/protobuf/empty.proto";
+
+service FansFollow {
+  // 获取用户粉丝信息列表
+  rpc GetUserFansList(GetUserListReq) returns (GetUserListReply) {}
+  // 获取用户关注信息列表
+  rpc GetUserFollowList(GetUserListReq) returns (GetUserListReply) {}
+  // 获取用户粉丝数量
+  rpc GetUserFansCount(GetUserListCountReq) returns (GetUserListCountReply) {}
+  // 获取用户关注数量
+  rpc GetUserFollowCount(GetUserListCountReq) returns (GetUserListCountReply) {}
+  // 关注用户
+  rpc FollowUser(FollowUserReq) returns (google.protobuf.Empty) {}
+  // 取消关注用户
+  rpc CancelFollowUser(CancelFollowUserReq) returns (google.protobuf.Empty) {}
+}
+
+// 获取用户关注列表请求
+message GetUserListReq {
+  uint32 userid = 1;
+  uint32 page = 2;
+}
+// 返回关注分页用户id列表
+message GetUserListReply{
+  repeated uint32 userid_list = 1;
+}
+
+// 关注用户请求
+message FollowUserReq{
+  uint32 userid = 1;
+  uint32 follow_user_id = 2;
+}
+
+// 取消关注用户请求
+message CancelFollowUserReq{
+  uint32 userid = 1;
+  uint32 follow_user_id = 2;
+}
+
+// 获取用户粉丝数量
+message GetUserListCountReq{
+  uint32 userid = 1;
+}
+// 返回粉丝数量
+message GetUserListCountReply{
+  uint32 fans_count = 1;
+}
