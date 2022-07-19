@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package fansfollow.v1;
 
-option go_package = "service/api/account/v1;v1";
+option go_package = "service/api/fansfollow/v1;v1";
 import "google/protobuf/empty.proto";
 
 service FansFollow {
