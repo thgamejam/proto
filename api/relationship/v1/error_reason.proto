@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package fansfollow.v1;
+package relationship.v1;
 import "errors/errors.proto";
 
-option go_package = "service/api/fansfollow/v1;v1";
+option go_package = "service/api/relationship/v1;v1";
 option java_multiple_files = true;
-option java_package = "fansfollow.v1.errors";
-option objc_class_prefix = "APIFansFollowErrors";
+option java_package = "relationship.v1.errors";
+option objc_class_prefix = "APIFansRelationshipErrors";
 
 enum ErrorReason {
   option (errors.default_code) = 500;
