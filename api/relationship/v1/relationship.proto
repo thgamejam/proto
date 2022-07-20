@@ -5,7 +5,7 @@ package relationship.v1;
 option go_package = "service/api/relationship/v1;v1";
 import "google/protobuf/empty.proto";
 
-service FansFollow {
+service Relationship {
   // 获取用户粉丝信息列表
   rpc GetUserFansList(GetUserListReq) returns (GetUserListReply) {}
   // 获取用户关注信息列表
