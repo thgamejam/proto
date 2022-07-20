@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package thjam.api.session.v1;
+
+import "validate/validate.proto";
+import "google/protobuf/duration.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "service/api/session/v1;v1";
+
+// 用户会话记录服务
+service Session {
+  // 创建会话
+  rpc CreateSession(CreateSessionReq) returns (CreateSessionReply) {}
+
+  // 验证会话
+  rpc VerifySession(VerifySessionReq) returns (VerifySessionReply) {}
+
+  // 关闭一个用户会话
+  rpc CloseSession(CloseSessionReq) returns (google.protobuf.Empty) {}
+
+  // 关闭用户所有会话
+  rpc CloseAllSession(CloseSessionReq) returns (google.protobuf.Empty) {}
+
+  // 获取用户的所有会话信息
+  rpc GetAllSessionInfo(GetAllSessionInfoReq) returns (GetAllSessionInfoReply) {}
+
+  // 更新会话信息，可在续签时更新数据
+  rpc UpdateSessionInfo(UpdateSessionInfoReq) returns (google.protobuf.Empty) {}
+}
+
+
+message SessionInfo {
+  string sid = 1 [(validate.rules).string.len = 32];  // 会话id
+  string ip = 2 [(validate.rules).string.ipv4 = true];
+  google.protobuf.Timestamp time = 3 [(validate.rules).timestamp.required = true]; // 最后更新时间
+}
+
+// CreateSessionReq 创建会话请求
+message CreateSessionReq {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];    // 账户id
+  string ip = 2 [(validate.rules).string.ipv4 = true];  // 会话客户端的ip
+  google.protobuf.Duration expires_at = 3 [(validate.rules).duration.required = true]; // 会话最长有效期
+}
+// CreateSessionReply 验证会话回复
+message CreateSessionReply {
+  string sid = 1;  // 会话id
+}
+
+// VerifySessionReq 验证会话请求
+message VerifySessionReq {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
+  string sid = 2 [(validate.rules).string.len = 32];  // 会话id
+}
+// VerifySessionReply 验证会话回复
+message VerifySessionReply {
+  bool ok = 1;  // true 正确, false 不正确
+}
+
+// CloseSessionReq 关闭会话请求
+message CloseSessionReq {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
+  string sid = 2 [(validate.rules).string.len = 32];  // 会话id
+}
+
+// GetAllSessionInfoReq 获取用户所有会话信息请求
+message GetAllSessionInfoReq {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
+}
+// GetAllSessionInfoReply 获取用户所有会话信息回复
+message GetAllSessionInfoReply {
+  uint32 id = 1;  // 账户id
+  repeated SessionInfo info = 2;
+}
+
+// UpdateSessionInfoReq 更新会话信息请求
+message UpdateSessionInfoReq {
+  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
+  SessionInfo info = 2;
+}

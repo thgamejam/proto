@@ -3,44 +3,32 @@ syntax = "proto3";
 package account.v1;
 
 import "validate/validate.proto";
-import "google/protobuf/duration.proto";
 import "google/protobuf/empty.proto";
 
 option go_package = "service/api/account/v1;v1";
-option java_multiple_files = true;
-option java_package = "dev.kratos.api.account.v1";
-option java_outer_classname = "AccountProtoV1";
 
 service Account {
-  // 预创建邮箱账号
+  // PrepareCreateEMailAccount 预创建邮箱账号
   rpc PrepareCreateEMailAccount (PrepareCreateEMailAccountReq) returns (PrepareCreateEMailAccountReply) {}
 
-  // 完成创建邮箱账号
+  // FinishCreateEMailAccount 完成创建邮箱账号
   rpc FinishCreateEMailAccount (FinishCreateEMailAccountReq) returns (FinishCreateEMailAccountReply) {}
 
-  // 使用ID获取账号
+  // GetAccount 使用ID获取账号
   rpc GetAccount (GetAccountReq) returns (GetAccountReply) {}
 
   // ExistAccountEMail 是否存在邮箱
   rpc ExistAccountEMail (ExistAccountEMailReq) returns (ExistAccountEMailReply) {}
 
-  // 校验密码
+  // VerifyPassword 校验密码
   rpc VerifyPassword(VerifyPasswordReq) returns (VerifyPasswordReply) {}
 
-  // 保存密码
+  // SavePassword 保存密码
   rpc SavePassword(SavePasswordReq) returns (google.protobuf.Empty) {}
 
-  // 获取密码加密公钥
+  // GetKey 获取密码加密公钥
   rpc GetKey (google.protobuf.Empty) returns (GetKeyReply) {}
 
-  // 创建会话
-  rpc CreateSession(CreateSessionReq) returns (CreateSessionReply) {}
-
-  // 验证会话
-  rpc VerifySession(VerifySessionReq) returns (VerifySessionReply) {}
-
-  // 关闭会话
-  rpc CloseSession(CloseSessionReq) returns (CloseSessionReply) {}
 }
 
 // PrepareCreateEMailAccountReq 预创建邮箱账号请求
@@ -90,12 +78,13 @@ message ExistAccountEMailReply {
 
 // VerifyPasswordReq 验证密码请求
 message VerifyPasswordReq {
-  // 用户登录标识, 未必是用户名 len:4-32
-  string username = 1 [(validate.rules).string = {min_len: 4, max_len: 32}];
+  // 用户登录标识，必须选其一，否则将返回错误
+  optional uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
+  optional string email = 2 [(validate.rules).string = {email: true, max_len: 32}]; // 邮箱
   // 密文密码 len:64-256
-  string ciphertext = 2 [(validate.rules).string = {min_len: 64, max_len: 256}];
+  string ciphertext = 3 [(validate.rules).string = {min_len: 64, max_len: 256}];
   // 公钥摘要 len:16
-  string hash = 3 [(validate.rules).string.len = 16];
+  string hash = 4 [(validate.rules).string.len = 16];
 }
 // VerifyPasswordReply 验证密码回复
 message VerifyPasswordReply {
@@ -116,35 +105,4 @@ message SavePasswordReq {
 message GetKeyReply {
   string hash = 1;  // 密钥hash
   string key = 2;   // 公钥内容
-}
-
-// CreateSessionReq 创建会话请求
-message CreateSessionReq {
-  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];                    // 账户id
-  string ip = 2 [(validate.rules).string = {min_len: 7, max_len: 15}];  // 会话客户端的ip
-  google.protobuf.Duration expires_at = 3;                              // 会话最长有效期
-}
-// CreateSessionReply 验证会话回复
-message CreateSessionReply {
-  string sid = 1;  // 会话id
-}
-
-// VerifySessionReq 验证会话请求
-message VerifySessionReq {
-  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
-  string sid = 2 [(validate.rules).string.len = 32];  // 会话id
-}
-// VerifySessionReply 验证会话回复
-message VerifySessionReply {
-  bool ok = 1;  // true 正确, false 错误
-}
-
-// CloseSessionReq 关闭会话请求
-message CloseSessionReq {
-  uint32 id = 1 [(validate.rules).uint32 = {gt: 0}];  // 账户id
-  string sid = 2 [(validate.rules).string.len = 32];  // 会话id
-}
-// CloseSessionReply 关闭会话回复
-message CloseSessionReply {
-  bool ok = 1;  // true 正确, false 错误
 }
