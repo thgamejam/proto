@@ -3,6 +3,7 @@ syntax = "proto3";
 package thjam.api.user.v1;
 
 import "validate/validate.proto";
+import "google/api/annotations.proto";
 import "google/protobuf/empty.proto";
 
 option go_package = "proto/api/user/v1;v1";
@@ -40,6 +41,49 @@ service User {
 
   // 解封用户
   rpc DeBanUser(DeBanUserRequest) returns (google.protobuf.Empty) {}
+
+
+
+  // 关注服务相关
+  // 获取用户粉丝信息列表
+  rpc GetUserFansList(GetUserListReq) returns (GetUserListReply) {
+    option(google.api.http) = {
+      get: "/web/v1/users/relationship/fans"
+      body: "*"
+    };
+  }
+
+  // 获取用户关注信息列表
+  rpc GetUserFollowList(GetUserListReq) returns (GetUserListReply) {
+    option(google.api.http) = {
+      get: "/web/v1/users/relationship/follows"
+      body: "*"
+    };
+  }
+
+  // 获取用户关注数量
+  rpc GetUserFollowInfo(GetUserFollowInfoReq) returns (GetUserFollowInfoReply) {
+    option(google.api.http) = {
+      get: "/web/v1/users/relationship/count"
+      body: "*"
+    };
+  }
+
+  // 关注用户
+  rpc FollowUser(FollowUserReq) returns (google.protobuf.Empty) {
+    option(google.api.http) = {
+      post: "/web/v1/users/relationship/followUser"
+      body: "*"
+    };
+  }
+
+  // 取消关注用户
+  rpc CancelFollowUser(CancelFollowUserReq) returns (google.protobuf.Empty) {
+    option(google.api.http) = {
+      delete: "/web/v1/users/relationship/deleteRelationship"
+      body: "*"
+    };
+  }
 
 }
 
@@ -116,4 +160,36 @@ message BanUserRequest {
 }
 message DeBanUserRequest {
   uint32 id = 1;  // user-id
+}
+
+// 获取用户关注列表请求
+message GetUserListReq {
+  uint32 userid = 1;
+  uint32 page = 2;
+}
+// 返回关注分页用户id列表
+message GetUserListReply{
+  repeated uint32 userid_list = 1;
+}
+
+// 关注用户请求
+message FollowUserReq{
+  uint32 userid = 1;
+  uint32 follow_user_id = 2;
+}
+
+// 取消关注用户请求
+message CancelFollowUserReq{
+  uint32 userid = 1;
+  uint32 follow_user_id = 2;
+}
+
+// 获取用户关注请求
+message GetUserFollowInfoReq{
+  uint32 userid = 1;
+}
+message GetUserFollowInfoReply{
+  uint32 userid = 1;
+  uint32 fansCount = 2;
+  uint32 followCount = 3;
 }
